@@ -265,16 +265,13 @@ See `references/testing-guide.md` for the full testing methodology. The short ve
 
 ## Step 9: Distribute
 
-See `references/distribution-guide.md` for full details.
+See `references/distribution-guide.md` for full details including README templates.
 
-**For individual use:** Place in Claude Code skills directory or upload via Claude.ai Settings at Capabilities then Skills.
+**For public sharing (recommended):** Host on GitHub. Any repo with a valid `SKILL.md` is automatically installable via `npx skills add yourorg/your-repo` — no registry, config, or integration steps required. Include this one-liner in your README so users know how to install.
+
+**For individual use:** Place in `~/.claude/skills/` (global) or `.claude/skills/` (project), or upload via Claude.ai Settings.
 
 **For teams:** Admins can deploy skills workspace-wide with automatic updates and centralized management.
-
-**For public sharing:**
-1. Host on GitHub with a clear README (separate from SKILL.md -- the README is for humans, SKILL.md is for Claude)
-2. Document in your MCP repo if applicable
-3. Include installation instructions, example usage, and screenshots
 
 **For programmatic use:** The API provides `/v1/skills` endpoint and `container.skills` parameter for the Messages API.
 

@@ -1,19 +1,70 @@
 # Distribution and Sharing Guide
 
-## Current Distribution Model
+## Installing Skills with npx (Recommended)
 
-### How Individual Users Get Skills
+The easiest way to install skills from GitHub is `npx skills add` — a CLI built by Vercel for the Agent Skills open standard. **Any GitHub repo containing a valid `SKILL.md` is automatically compatible.** No special configuration, manifest, or registry step is needed.
 
-1. Download the skill folder
-2. Zip the folder (if needed)
-3. Upload to Claude.ai via Settings then Capabilities then Skills
-4. Or place in Claude Code skills directory
+### Install commands
 
-### Organization-Level Skills
+```bash
+# From a GitHub repo (shorthand)
+npx skills add yourorg/your-skill-repo
 
-- Admins can deploy skills workspace-wide (shipped December 18, 2025)
-- Automatic updates when admin publishes new versions
-- Centralized management
+# From a full GitHub URL
+npx skills add https://github.com/yourorg/your-skill-repo
+
+# Install a specific skill from a multi-skill repo
+npx skills add yourorg/your-skills --skill my-specific-skill
+
+# Install globally (user-level, available across all projects)
+npx skills add yourorg/your-skills --global
+
+# List available skills in a repo without installing
+npx skills add yourorg/your-skills --list
+```
+
+### How it works
+
+1. Clones the repo to a temp directory
+2. Scans for `SKILL.md` files in `skills/`, root, and other standard locations
+3. Presents an interactive picker if multiple skills are found
+4. Copies to `.agents/skills/<name>/` (canonical location)
+5. Creates symlinks into agent-specific directories (e.g., `~/.claude/skills/<name>/` for Claude Code)
+
+### What your repo needs
+
+Nothing beyond a valid skill structure. If your repo has a `SKILL.md` with valid `name` and `description` frontmatter, it works. The CLI discovers skills automatically.
+
+**Single-skill repo:**
+```
+your-skill/
+  SKILL.md
+  references/       # optional
+  scripts/           # optional
+```
+
+**Multi-skill repo:**
+```
+your-skills-repo/
+  skills/
+    skill-one/
+      SKILL.md
+    skill-two/
+      SKILL.md
+  README.md
+```
+
+### Other install methods
+
+**Claude.ai (manual upload):**
+1. Download or zip the skill folder
+2. Upload via Settings then Capabilities then Skills
+
+**Claude Code (manual placement):**
+Place the skill folder in `~/.claude/skills/` (global) or `.claude/skills/` (project-level).
+
+**Organization-level:**
+Admins can deploy skills workspace-wide with automatic updates and centralized management.
 
 ## An Open Standard
 
@@ -60,24 +111,25 @@ For programmatic use cases (building applications, agents, or automated workflow
 
 ### 3. Create an Installation Guide
 
+Use this template in your repo's README. Lead with the one-liner — most users will never need the manual steps.
+
 ```markdown
-## Installing the [Your Service] Skill
+## Install
 
-1. Download the skill:
-   - Clone repo: `git clone https://github.com/yourcompany/skills`
-   - Or download ZIP from Releases
+npx skills add yourorg/your-skill-repo
 
-2. Install in Claude:
-   - Open Claude.ai, go to Settings then Skills
-   - Click "Upload skill"
-   - Select the skill folder (zipped)
+That's it. The skill is now available in Claude Code (and other compatible agents).
 
-3. Enable the skill:
-   - Toggle on the [Your Service] skill
-   - Ensure your MCP server is connected
+### Alternative installation
 
-4. Test:
-   - Ask Claude: "Set up a new project in [Your Service]"
+If you prefer manual installation:
+
+1. Clone: `git clone https://github.com/yourorg/your-skill-repo`
+2. Copy the skill folder to `~/.claude/skills/` (global) or `.claude/skills/` (project-level)
+
+### Verify
+
+Ask Claude: "Set up a new project in [Your Service]" — the skill should trigger automatically.
 ```
 
 ## Positioning Your Skill
