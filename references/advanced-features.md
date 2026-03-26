@@ -19,13 +19,11 @@ agent: Explore
 
 In the body of that skill, lines like these inject live data:
 
-```
-- PR diff: !` gh pr diff `
-- PR comments: !` gh pr view --comments `
-- Changed files: !` gh pr diff --name-only `
-```
+    - PR diff: !​`gh pr diff`
+    - PR comments: !​`gh pr view --comments`
+    - Changed files: !​`gh pr diff --name-only`
 
-(Note: the spaces inside the backticks above are intentional to prevent this reference file from being preprocessed. In actual usage, remove the spaces.)
+(The examples above use zero-width spaces between `!` and the backtick to prevent preprocessing. In actual skill files, type them directly with no space.)
 
 When the skill runs, each command executes immediately, output replaces the placeholder, and Claude receives the fully-rendered prompt with actual data. This is preprocessing — not something Claude executes.
 

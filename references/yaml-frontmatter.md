@@ -291,32 +291,30 @@ $ARGUMENTS
 
 The directory containing the skill's `SKILL.md` file. For plugin skills, this is the skill's subdirectory within the plugin, not the plugin root. Use this in shell commands to reference scripts or files bundled with the skill, regardless of the current working directory.
 
-```markdown
-Run validation: !`python ${CLAUDE_SKILL_DIR}/scripts/validate.py`
-```
+**Example:**
+
+    Run validation: !​`python ${CLAUDE_SKILL_DIR}/scripts/validate.py`
+
+(In the line above, the bang-backtick pattern triggers preprocessing at load time.)
 
 ---
 
-## Dynamic Context Injection: !`command`
+## Dynamic Context Injection
 
-The `` !`command` `` syntax runs shell commands **before** the skill content is sent to Claude. The command output replaces the placeholder inline — Claude only sees the result.
+The bang-backtick syntax ( **!&#96;command&#96;** ) runs shell commands **before** the skill content is sent to Claude. The command output replaces the placeholder inline — Claude only sees the result.
 
-**Correct syntax** — backtick-wrapped:
+**Correct syntax** — bang followed by backtick-wrapped command:
 
-```markdown
-# In SKILL.md body:
-Current branch: !`git branch --show-current`
-Recent commits: !`git log --oneline -5`
-PR diff: !`gh pr diff`
-```
+    # In SKILL.md body:
+    Current branch: !​`git branch --show-current`
+    Recent commits: !​`git log --oneline -5`
+    PR diff: !​`gh pr diff`
 
-This is preprocessing, not something Claude executes. Each `` !`command` `` runs immediately when the skill loads, output replaces the placeholder, and Claude receives the fully-rendered prompt.
+This is preprocessing, not something Claude executes. Each bang-backtick command runs immediately when the skill loads, output replaces the placeholder, and Claude receives the fully-rendered prompt.
 
 **Using ${CLAUDE_SKILL_DIR} for bundled scripts:**
 
-```markdown
-!`python ${CLAUDE_SKILL_DIR}/scripts/gather-context.py`
-```
+    !​`python ${CLAUDE_SKILL_DIR}/scripts/gather-context.py`
 
 **Complete example combining dynamic context with subagent execution:**
 
@@ -328,15 +326,19 @@ context: fork
 agent: Explore
 allowed-tools: Bash(gh *)
 ---
-
-## Pull request context
-- PR diff: !`gh pr diff`
-- PR comments: !`gh pr view --comments`
-- Changed files: !`gh pr diff --name-only`
-
-## Your task
-Summarize this pull request...
 ```
+
+In the body of that skill, these lines inject live data at load time:
+
+    ## Pull request context
+    - PR diff: !​`gh pr diff`
+    - PR comments: !​`gh pr view --comments`
+    - Changed files: !​`gh pr diff --name-only`
+
+    ## Your task
+    Summarize this pull request...
+
+**WARNING:** Do not put bang-backtick examples in SKILL.md directly — the preprocessor will execute them. Document this syntax only in reference files using indented code blocks (4-space indent) with zero-width spaces between `!` and the backtick to prevent preprocessing.
 
 ---
 
@@ -371,7 +373,7 @@ Skill(deploy *)     # Deny prefix match (if in deny rules)
 
 ## Open Standard
 
-Claude Code skills follow the [Agent Skills](https://agentskills.io) open standard, which works across multiple AI tools. Claude Code extends the standard with `context: fork` (subagent execution), `agent` field, and `` !`command` `` (dynamic context injection).
+Claude Code skills follow the [Agent Skills](https://agentskills.io) open standard, which works across multiple AI tools. Claude Code extends the standard with `context: fork` (subagent execution), `agent` field, and bang-backtick dynamic context injection.
 
 ---
 
